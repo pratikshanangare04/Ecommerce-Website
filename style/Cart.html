@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    /* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.cart-content {
+  margin-top: 20px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cart-item button.delete {
+  background-color: #ff1a1a;
+}
+
+.cart-item button.delete:hover {
+  background-color: #e60000;
+}
+
+.cart-item button.buy {
+  background-color: #28a745;
+}
+
+.cart-item button.buy:hover {
+  background-color: #218838;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.logout-btn button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+<body>
+    <header>
+        <div class="logo">MyTalorzone</div>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Product.html">Products</a></li>
+            <li><a href="Cart.html">Cart</a></li>
+            <li style="margin-top: 10px;"><span id="userName"></span></li>
+          </ul>
+        </nav>
+        <div class="user-name" id="userNameDisplay"></div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search products...">
+          <button onclick="searchProducts()">Search</button>
+        </div>
+    </header>
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="error-message" class="error"></div>
+    <div id="cart-content" class="cart-content"></div>
+    <button id="buy-button" class="btn">Buy All</button>
+  </div>
+
+  <script>
+//     const userName = localStorage.getItem('userName');
+// if (userName) {
+//     document.getElementById('userName').textContent = `Hello, ${userName}!`;
+// } else {
+//     document.getElementById('userName').textContent = 'Hello, Guest!';
+// }
+
+const userId=localStorage.getItem('userId');
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Fetch cart data on page load
+  fetchCart();
+
+  // Add event listener for Buy All button
+  document.getElementById('buy-button').addEventListener('click', handleBuyAll);
+});
+
+// Fetch the cart data from the server
+function fetchCart() {
+  fetch('http://localhost:5000/cart/get-cart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userId })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        displayCart(data.cart);
+      } else {
+        document.getElementById('error-message').textContent = data.message || 'No cart found';
+      }
+    })
+    .catch(error => {
+      document.getElementById('error-message').textContent = 'Failed to fetch cart';
+      console.error('Error fetching cart:', error);
+    });
+}
+
+// Display cart items
+function displayCart(cart) {
+  const cartContent = document.getElementById('cart-content');
+  cartContent.innerHTML = ''; // Clear previous content
+
+  if (cart.productsInCart && cart.productsInCart.length > 0) {
+    cart.productsInCart.forEach(item => {
+      const cartItem = document.createElement('div');
+      cartItem.classList.add('cart-item');
+      cartItem.innerHTML = `
+        <span>Product ID: ${item.productId} - Quantity: ${item.productQty}</span>
+        <div>
+          <button class="buy" onclick="handleBuyItem('${item.productId}')">Buy</button>
+          <button class="delete" onclick="handleDelete('${item.productId}')">Delete</button>
+        </div>
+      `;
+      cartContent.appendChild(cartItem);
+    });
+  } else {
+    cartContent.innerHTML = '<p>Your cart is empty.</p>';
+  }
+}
+
+// Handle the Buy button click for a specific item
+function handleBuyItem(productId) {
+  alert(`Proceeding to buy product with ID: ${productId}`);
+  // You can call an API to place the order for this product
+  // For example, call the order API to initiate purchase for the specific product
+  // Example: placeOrder(productId);
+}
+
+// Handle Buy All button click
+function handleBuyAll() {
+  alert('Proceeding to checkout all items');
+  // You can call an API to place the order for all items in the cart
+  // Example: placeOrderForAll();
+}
+
+// Handle delete button click for a specific product
+function handleDelete(productId) {
+  fetch('http://localhost:5000/cart/delete-items', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userId, productId })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === 'Item deleted successfully.') {
+        // Re-fetch the cart to update after deletion
+        fetchCart();
+      } else {
+        alert(data.message || 'Failed to delete item');
+      }
+    })
+    .catch(error => {
+      alert('Error deleting item');
+      console.error('Error deleting item:', error);
+    });
+}
+
+function logout() {
+        fetch('/logout', {
+          method: 'POST',
+          credentials: 'same-origin',  // Ensure session cookie is sent with the request
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert(data.message); // Show a success message
+            // Redirect to homepage or login page after successful logout
+            window.location.href = '/'; // Change this to the appropriate page
+          }
+        })
+        .catch(error => {
+          alert('An error occurred while logging out. Please try again.'); // Show an error message
+        });
+      }
+      
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 1em 2em;
+ 
+}
+header .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1em;
+}
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+
+/* Navigation Styles */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  display: block;
+}
+
+nav ul li a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  list-style: none;
+  padding: 0.5em 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-menu li a {
+  color: #333;
+  padding: 0.5em 1em;
+  display: block;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #f8f8f8;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
+.third{
+    position: absolute;
+    top: 80px;
+    height: 70px; 
+    width: 100%;
+    background-color:rgb(235, 226, 226,0.7);
+    display: flex;
+    flex-direction: row;
+}
+
+
+.container{
+    position: relative;
+    top: 450px;
+}
+
+.product-list {
+    display: flex;
+    /* grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); */
+    flex-wrap: wrap;
+    gap: 5rem;
+    padding: 1rem;
+}
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f9f9f9;
+    height: 400px;
+    width: 300px;
+}
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+.price {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Set a fixed height for consistent layout */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures images don't spill out of the container */
+    background-color: #f9f9f9; /* Fallback color in case image doesn't load */
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures the full image is visible without cropping */
+    transition: transform 0.3s; /* Smooth zoom effect on hover */
+  }
+  
+  .image-container:hover img {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+  
+  .view-details-btn {
+    position: absolute;
+    bottom: 15px; /* Position the button vertically below the image */
+    left: 50%;
+    width: 150px;
+    transform: translateX(-50%);
+    background-color: #4CAF50; /* New button color (green) */
+    color: white; /* Text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+  }
+  
+  .image-container:hover .view-details-btn {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .view-details-btn:hover {
+    background-color: #ac673c; /* Darker shade on hover */
+  }
+  
+  .product-details-container {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+  }
+  
+  .details-content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .details-left img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 5px;
+  }
+  
+  .details-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .details-right p {
+    margin: 0;
+  }
+  
+  .close-details-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .close-details-btn:hover {
+    background-color: #e60000;
+  }
+  
